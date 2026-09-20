@@ -87,14 +87,13 @@ function ProjectCard({ project, onOpen }) {
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [sessionOpen, setSessionOpen] = useState(false);
-  const [notice, setNotice] = useState('');
 
   const openProject = (project) => {
     if (project.id === 'core') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
-    setNotice(`${project.name} is registered at app.datasnare.com${project.path}.`);
+    window.location.assign(project.path);
   };
 
   return (
@@ -158,7 +157,6 @@ export default function App() {
 
       <footer className="footer"><span>DataSnare / app.datasnare.com</span><span>Core shell v0.1</span></footer>
 
-      {notice && <button className="notice" type="button" onClick={() => setNotice('')}>{notice}<X size={15} /></button>}
       {sessionOpen && <div className="modal-backdrop" role="presentation" onClick={() => setSessionOpen(false)}><section className="session-modal" role="dialog" aria-modal="true" aria-labelledby="session-title" onClick={(event) => event.stopPropagation()}><button className="modal-close" type="button" onClick={() => setSessionOpen(false)} aria-label="Close"><X size={18} /></button><p className="eyebrow">Shared identity</p><h2 id="session-title">Account connection is next.</h2><p>The shell is ready for the shared login contract. Connect the identity provider and organization licensing service here before production launch.</p><button className="primary-button" type="button" onClick={() => setSessionOpen(false)}>Close <Check size={17} /></button></section></div>}
     </div>
   );
