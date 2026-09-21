@@ -78,3 +78,12 @@ The initial connector lives in `backend/app/services/ninjaone.py`. It is deliber
 - stable external entity links for cross-tool evidence
 
 The connector does not persist credentials, expose browser routes, or perform NinjaOne management actions yet. Those belong behind Core/AIOps tenant authentication, encrypted secret storage, licensing checks, and audit/approval gates.
+
+## Core API boundary
+
+The initial Core API is in `backend/app/routes/ninjaone.py`:
+
+- `GET /api/tenants/{tenant_id}/integrations/ninjaone/connection` returns redacted connection metadata.
+- `POST /api/tenants/{tenant_id}/integrations/ninjaone/authorize` stores non-secret connection metadata and returns an OAuth2 authorization-code URL.
+
+Both routes require the current temporary `X-Actor` boundary. This is a development seam for route tests, not the final authentication system. The next backend step is replacing the in-memory repository with encrypted, database-backed storage and binding the actor to Core/AIOps identity and tenant permissions.

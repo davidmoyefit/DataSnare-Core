@@ -1,3 +1,6 @@
 aiohttp
+fastapi
+uvicorn[standard]
+httpx
 pytest
 pytest-asyncio
