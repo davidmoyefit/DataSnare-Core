@@ -5,6 +5,10 @@ export const PARTNER_CONNECTION_STATES = {
   disconnected: 'disconnected',
 };
 
+export const PARTNER_AUTH_METHODS = {
+  oauth2AuthorizationCode: 'oauth2.authorization_code',
+};
+
 export const PARTNER_CAPABILITIES = {
   inventoryRead: 'inventory.read',
   healthRead: 'health.read',
@@ -21,6 +25,9 @@ export const ninjaOnePartner = {
   provider: 'NinjaOne',
   documentationUrl: 'https://app.ninjarmm.com/apidocs/',
   apiVersion: 'v2',
+  authorizationUrl: 'https://oc.ninjarmm.com/ws/oauth/authorize',
+  tokenUrl: 'https://oc.ninjarmm.com/ws/oauth/token',
+  authMethods: [PARTNER_AUTH_METHODS.oauth2AuthorizationCode],
   connectionState: PARTNER_CONNECTION_STATES.planned,
   credentialBoundary: 'backend',
   requiresSeparateLicense: false,

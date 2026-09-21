@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Mapping
+from urllib.parse import urlencode
 
 import aiohttp
 
@@ -25,6 +26,60 @@ class NinjaOneConnection:
         version = self.api_version.strip("/")
         path = resource.strip("/")
         return f"{base}/{version}/{path}"
+
+
+@dataclass(frozen=True)
+class NinjaOneOAuthConfig:
+    """Server-side OAuth application settings; never serialize client_secret."""
+
+    client_id: str
+    client_secret: str
+    redirect_uri: str
+    authorization_url: str = "https://oc.ninjarmm.com/ws/oauth/authorize"
+    token_url: str = "https://oc.ninjarmm.com/ws/oauth/token"
+
+    def authorization_request_url(self, state: str, *, scope: str | None = None) -> str:
+        params = {
+            "response_type": "code",
+            "client_id": self.client_id,
+            "redirect_uri": self.redirect_uri,
+            "state": state,
+        }
+        if scope:
+            params["scope"] = scope
+        return f"{self.authorization_url}?{urlencode(params)}"
+
+
+async def exchange_authorization_code(
+    config: NinjaOneOAuthConfig,
+    code: str,
+    session: aiohttp.ClientSession,
+) -> dict[str, Any]:
+    """Exchange a short-lived authorization code without exposing secrets."""
+
+    payload = {
+        "grant_type": "authorization_code",
+        "code": code,
+        "client_id": config.client_id,
+        "client_secret": config.client_secret,
+        "redirect_uri": config.redirect_uri,
+    }
+    try:
+        async with session.post(
+            config.token_url,
+            data=payload,
+            headers={"Accept": "application/json"},
+        ) as response:
+            if response.status >= 400:
+                detail = (await response.text())[:500]
+                raise NinjaOneError(f"NinjaOne OAuth {response.status}: {detail}")
+            token = await response.json()
+    except aiohttp.ClientError as exc:
+        raise NinjaOneError("NinjaOne OAuth token request failed") from exc
+
+    if not token.get("access_token"):
+        raise NinjaOneError("NinjaOne OAuth response did not include an access token")
+    return token
 
 
 class NinjaOneClient:

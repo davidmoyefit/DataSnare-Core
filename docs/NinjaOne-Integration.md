@@ -4,8 +4,19 @@ DataSnare-Core will connect to NinjaOne as a partner service. NinjaOne remains a
 
 ## Reference
 
-- [NinjaOne Public API 2.0](https://app.ninjarmm.com/apidocs/)
+- [NinjaOne Public API 2.0](https://oc.ninjarmm.com/apidocs/?links.active=authorization)
 - OpenAPI document: `https://app.ninjarmm.com/apidocs/NinjaRMM-API-v2.json`
+
+## OAuth2 authentication
+
+NinjaOne documents OAuth2 authorization-code and implicit grants. Core will use the authorization-code grant because the client secret and token exchange can remain on the server. Core will not use the implicit grant for the integrated application because it would place tokens in a browser context.
+
+Authorization endpoints:
+
+- Authorize: `https://oc.ninjarmm.com/ws/oauth/authorize`
+- Token: `https://oc.ninjarmm.com/ws/oauth/token`
+
+The callback must validate the `state` value, exchange the one-time code server-side, encrypt the resulting refresh token, and associate the connection with the authenticated DataSnare tenant. Access tokens should be short-lived and held only in backend memory or an approved secret/token store.
 
 ## Planned phases
 
@@ -62,6 +73,7 @@ The initial connector lives in `backend/app/services/ninjaone.py`. It is deliber
 
 - versioned endpoint construction
 - bearer-token requests through a server-side `aiohttp` session
+- OAuth2 authorization-code URL construction and server-side code exchange
 - collection envelope normalization
 - stable external entity links for cross-tool evidence
 

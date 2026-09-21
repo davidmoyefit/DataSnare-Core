@@ -2,9 +2,25 @@ import pytest
 
 from app.services.ninjaone import (
     NinjaOneConnection,
+    NinjaOneOAuthConfig,
     normalize_collection,
     normalize_external_entity,
 )
+
+
+def test_oauth_config_builds_authorization_code_url():
+    config = NinjaOneOAuthConfig(
+        client_id="client-123",
+        client_secret="server-secret",
+        redirect_uri="https://app.datasnare.com/api/integrations/ninjaone/callback",
+    )
+
+    url = config.authorization_request_url("csrf-state", scope="monitoring")
+
+    assert "response_type=code" in url
+    assert "client_id=client-123" in url
+    assert "state=csrf-state" in url
+    assert "client_secret" not in url
 
 
 def test_connection_builds_versioned_endpoint_without_duplicate_slashes():
