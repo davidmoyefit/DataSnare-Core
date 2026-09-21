@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowUpRight, Check, ChevronRight, CircleUserRound, ExternalLink, KeyRound, Menu, ShieldCheck, X } from 'lucide-react';
+import { ninjaOnePartner } from './contracts/partnerIntegrations';
 
 const projects = [
   {
@@ -69,10 +70,10 @@ const projects = [
 
 const partnerIntegrations = [
   {
-    name: 'NinjaOne RMM',
+    ...ninjaOnePartner,
     category: 'Partner integration',
     description: 'Connect organizations, devices, alerts, activities, health reports, patch status, and ticketing from NinjaOne.',
-    docsUrl: 'https://app.ninjarmm.com/apidocs/',
+    docsUrl: ninjaOnePartner.documentationUrl,
   },
 ];
 

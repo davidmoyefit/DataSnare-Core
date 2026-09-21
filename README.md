@@ -16,6 +16,8 @@ Core also acts as the partner connection point. NinjaOne RMM is planned as the f
 
 Update `src/App.jsx` when a production deployment URL changes, or move the registry to a Core API when the identity and licensing services are available.
 
+Partner connection metadata is defined in `src/contracts/partnerIntegrations.js`. It is intentionally provider-neutral at the contract boundary: the backend owns credentials, connection state, capability checks, and external API calls.
+
 ## Local development
 
 ```powershell
