@@ -55,3 +55,14 @@ Recommended backend boundaries:
 - `ninjaone_action_audit`: requested action, DataSnare decision, external response, and actor
 
 The browser should receive normalized DataSnare objects, never raw secrets or unfiltered partner responses.
+
+## First implementation slice
+
+The initial connector lives in `backend/app/services/ninjaone.py`. It is deliberately read-only and provides:
+
+- versioned endpoint construction
+- bearer-token requests through a server-side `aiohttp` session
+- collection envelope normalization
+- stable external entity links for cross-tool evidence
+
+The connector does not persist credentials, expose browser routes, or perform NinjaOne management actions yet. Those belong behind Core/AIOps tenant authentication, encrypted secret storage, licensing checks, and audit/approval gates.
