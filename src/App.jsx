@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowUpRight, Check, ChevronRight, CircleUserRound, KeyRound, Menu, ShieldCheck, X } from 'lucide-react';
+import { ArrowUpRight, Check, ChevronRight, CircleUserRound, ExternalLink, KeyRound, Menu, ShieldCheck, X } from 'lucide-react';
 
 const projects = [
   {
@@ -64,6 +64,15 @@ const projects = [
     path: '/',
     license: 'Included',
     accent: 'ink',
+  },
+];
+
+const partnerIntegrations = [
+  {
+    name: 'NinjaOne RMM',
+    category: 'Partner integration',
+    description: 'Connect organizations, devices, alerts, activities, health reports, patch status, and ticketing from NinjaOne.',
+    docsUrl: 'https://app.ninjarmm.com/apidocs/',
   },
 ];
 
@@ -138,11 +147,25 @@ export default function App() {
         </section>
 
         <section className="section-heading" id="projects">
-          <div><p className="eyebrow">Project registry</p><h2>Seven instruments, one point of entry.</h2></div>
-          <p>Each project keeps its own release cycle and license while the suite keeps your context close.</p>
+          <div><p className="eyebrow">Project registry</p><h2>Six tools, one point of entry.</h2></div>
+          <p>Each DataSnare tool keeps its own release cycle and license while Core keeps your context close.</p>
         </section>
         <section className="project-grid" aria-label="DataSnare projects">
           {projects.map((project) => <ProjectCard key={project.id} project={project} onOpen={openProject} />)}
+        </section>
+
+        <section className="partner-section" id="partners">
+          <div className="section-heading section-heading--partner">
+            <div><p className="eyebrow">Partner connections</p><h2>Bring your RMM context into the investigation.</h2></div>
+            <p>Core links external service data to the DataSnare workspace without treating a partner API as a DataSnare product license.</p>
+          </div>
+          {partnerIntegrations.map((partner) => (
+            <article className="partner-card" key={partner.name}>
+              <div className="partner-card__mark"><span>N1</span></div>
+              <div className="partner-card__body"><p className="eyebrow">{partner.category}</p><h3>{partner.name}</h3><p>{partner.description}</p></div>
+              <a className="partner-card__link" href={partner.docsUrl} target="_blank" rel="noreferrer">View API docs <ExternalLink size={16} /></a>
+            </article>
+          ))}
         </section>
 
         <section className="access-band" id="access">
